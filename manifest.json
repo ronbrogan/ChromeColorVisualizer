@@ -1,0 +1,14 @@
+{
+	"manifest_version": 2,
+	"name": "Chrome Color Visualizer",
+	"version": "1.0",
+	"description": "Makes hex color codes in text have corresponding color.",
+	"content_scripts": 
+	[
+		{
+			"matches": ["*://*/*"],
+			"js": ["content_script.js"],
+			"run_at": "document_end"
+		}
+	]
+}
