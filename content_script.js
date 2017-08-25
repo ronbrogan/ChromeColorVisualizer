@@ -1,3 +1,23 @@
+
+MutationObserver = window.MutationObserver || window.WebKitMutationObserver;
+
+var observer = new MutationObserver(function(mutations, observer) {
+    // fired when a mutation occurs
+    for(var i = 0; i < mutations.length; i++)
+    {
+        var elem = mutations[i].target;
+
+        walk(elem);
+    }
+});
+
+// define what element should be observed by the observer
+// and what types of mutations trigger the callback
+observer.observe(document.body, {
+  subtree: true,
+  childList: true
+});
+
 walk(document.body);
 
 function walk(node) 
@@ -18,6 +38,19 @@ function walk(node)
 		case 1:  // Element
 		case 9:  // Document
         case 11: // Document fragment
+            if(node.getAttribute("original-color"))
+                return;
+        
+            var ancestor = node.parentElement;
+        
+            while(ancestor != null)
+            {
+                if(ancestor.getAttribute("original-color"))
+                    return;
+        
+                ancestor = ancestor.parentElement
+            }
+
 			child = node.firstChild;
 			while ( child ) 
 			{
@@ -59,8 +92,6 @@ function insertNode(node, match, offset) {
 
     if(lum >= 50)
         foreground = "#000000";
-
-    console.log(lum);
     
     var span = document.createElement("span");
     span.style = 'background-color: ' + match + '; color: ' + foreground;
